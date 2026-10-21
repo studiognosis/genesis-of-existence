@@ -14,6 +14,7 @@
 
     <style>
         body, html {
+            font-size: 16px;
             margin: 0;
             padding: 0;
             width: 100%;
@@ -107,7 +108,7 @@
     <canvas id="webgl-canvas"></canvas>
 
     <!-- Gyroscope Permission Toggle (iOS 13+) -->
-    <div id="gyro-btn-container" class="absolute top-4 left-4 z-30 hidden">
+    <div id="gyro-btn-container" class="absolute top-4 left-4 z-40 hidden">
         <button id="enable-gyro-btn" onclick="requestGyroscopePermission()" class="glass-input px-3.5 py-2 rounded-full text-xs text-gray-200 hover:text-white border border-white/20 flex items-center space-x-2 transition">
             <span>Activate Gyroscope</span>
         </button>
@@ -199,8 +200,8 @@
         let lineMeshGroup;
         let activeLines = [];
 
-        let particleSize = 0.35;
-        let initialPinchDistance = 1;
+        let particleSize = 0.25;
+        let initialPinchDistance = null;
 
         let gyroTargetX = 0;
         let gyroTargetY = 0;
@@ -209,7 +210,7 @@
         let isGyroSupported = false;
         let currentWord = 'flower';
 
-        const ENGLISH_WORDS = ['flower', 'star', 'cube', 'pyramid', 'heart', 'sphere', 'crystal', 'atom'];
+        const ENGLISH_WORDS = ['flower', 'star', 'cube', 'pyramid', 'heart', 'sphere', 'crystal', 'flower'];
 
         const SHAPE_PRESETS = {
             'flower': generateComplexFlowerShape,
@@ -219,7 +220,7 @@
             'heart': generateComplexHeartShape,
             'sphere': generateComplexSphereShape,
             'crystal': generateComplexSphereShape,
-            'atom': generateComplexFlowerShape
+            'flower': generateComplexFlowerShape
         };
 
         function initThree() {
