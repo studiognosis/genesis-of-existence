@@ -117,8 +117,8 @@
     <!-- Initial Start Screen (Only Create Button) -->
     <div id="start-screen" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/90 transition-opacity duration-500">
         <div class="text-center space-y-6 max-w-sm px-4">
-            <h1 class="text-2xl font-light tracking-widest text-white uppercase drop-shadow-lg">Genesis Of Existence<embed src="" type=""></h1>
-            <p class="text-xs text-gray-400 font-light tracking-wide">Existence is an observational evaluation system aiming to explore all the "room for possibilities" in the big void: only "Nothing" has infinite room for possibilities, indefinable size, no start and no end, no energy requirement. It has infinite memory to keep imagining to define itself while facing lack and loneliness.</p>
+            <h1 class="text-2xl font-regular tracking-widest text-white uppercase drop-shadow-lg">Genesis Of Existence<embed src="" type=""></h1>
+            <p class="text-m text-gray-400 font-light tracking-wide">Existence is an observational evaluation system aiming to explore all the "room for possibilities" in the big void: only "Nothing" has infinite room for possibilities, indefinable size, no start and no end, no energy requirement. It has infinite memory to keep imagining to define itself while facing lack and loneliness.</p>
             <button 
                 onclick="startSimulation()"
                 class="bg-white text-black font-semibold px-8 py-3.5 rounded-full text-sm uppercase tracking-widest hover:bg-gray-200 transition duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)]"
@@ -130,9 +130,6 @@
 
     <!-- Floating Top Bar for Manifestation Progress & Word -->
     <div id="top-bar" class="absolute top-6 left-1/2 transform -translate-x-1/2 z-20 w-11/12 max-w-md flex flex-col items-center space-y-1.5 opacity-0 pointer-events-none transition-opacity duration-500">
-        <div id="word-display" class="text-xs text-gray-400 font-mono tracking-widest uppercase opacity-80">
-            Target: -
-        </div>
         <div id="progress-text" class="text-xs text-gray-200 font-medium tracking-widest uppercase drop-shadow">
             Materia Manifestata: 0%
         </div>
@@ -200,7 +197,7 @@
         let lineMeshGroup;
         let activeLines = [];
 
-        let particleSize = 0.25;
+        let particleSize = 0.3;
         let initialPinchDistance = null;
 
         let gyroTargetX = 0;
