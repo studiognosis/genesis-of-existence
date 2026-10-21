@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Genesis Of Existence</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000000;
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        #webgl-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .drop-shadow-md{
+            overflow: visible;
+        }
+
+        /* Glassmorphism Input Styling */
+        .glass-input {
+            background: rgba(18, 18, 24, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Large Touch-friendly Range Slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            height: 12px;
+            border-radius: 6px;
+            outline: none;
+            margin: 6px 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.25);
+        }
+
+        /* Hide scrollbar completely */
+        .controls-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .controls-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Spinner animation */
+        .loader {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="relative w-full h-full bg-black overflow-hidden select-none">
+
+    <!-- Canvas Three.js -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Gyroscope Permission Toggle (iOS 13+) -->
+    <div id="gyro-btn-container" class="absolute top-4 left-4 z-21 hidden">
+        <button id="enable-gyro-btn" onclick="requestGyroscopePermission()" class="glass-input px-3.5 py-2 rounded-full text-xs text-gray-200 hover:text-white border border-white/20 flex items-center space-x-2 transition">
+            <span>Activate Gyroscope</span>
+        </button>
+    </div>
+
+    <!-- Initial Start Screen (Only Create Button) -->
+    <div id="start-screen" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/90 transition-opacity duration-500">
+        <div class="text-center space-y-6 max-w-sm px-4">
+            <h1 class="text-2xl font-light tracking-widest text-white uppercase drop-shadow-lg">Genesis Of Existence<embed src="" type=""></h1>
+            <p class="text-xs text-gray-400 font-light tracking-wide">Existence is an observational evaluation system aiming to explore all the "room for possibilities" in the big void: only "Nothing" has infinite room for possibilities, indefinable size, no start and no end, no energy requirement. It has infinite memory to keep imagining to define itself while facing lack and loneliness.</p>
+            <button 
+                onclick="startSimulation()"
+                class="bg-white text-black font-semibold px-8 py-3.5 rounded-full text-sm uppercase tracking-widest hover:bg-gray-200 transition duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)]"
+            >
+                Create
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Top Bar for Manifestation Progress & Word -->
+    <div id="top-bar" class="absolute top-6 left-1/2 transform -translate-x-1/2 z-20 w-11/12 max-w-md flex flex-col items-center space-y-1.5 opacity-0 pointer-events-none transition-opacity duration-500">
+        <div id="word-display" class="text-xs text-gray-400 font-mono tracking-widest uppercase opacity-80">
+            Target: -
+        </div>
+        <div id="progress-text" class="text-xs text-gray-200 font-medium tracking-widest uppercase drop-shadow">
+            Materia Manifestata: 0%
+        </div>
+    </div>
+
+    <!-- Bottom Controls Panel -->
+    <div id="controls-panel" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 w-11/12 max-w-md p-2 opacity-0 pointer-events-none transition-opacity duration-500">
+        <div id="controls-content" class="space-y-3.5 max-h-72 overflow-y-auto controls-scroll pr-1 text-sm font-medium text-gray-100 drop-shadow-md">
+            
+            <!-- Particle Count Slider -->
+            <div>
+                <div class="flex justify-between mb-0.5">
+                    <label for="particleCount" class="text-sm">Conteggio Particelle</label>
+                    <span id="particleCountVal" class="text-gray-300 font-mono font-bold">0</span>
+                </div>
+                <input type="range" id="particleCount" min="0" max="500" value="0" class="w-full" oninput="updateSimulationSettings()">
+            </div>
+
+            <!-- Observer Focus Slider -->
+            <div>
+                <div class="flex justify-between mb-0.5">
+                    <label for="observerFocus" class="text-sm">Focus dell'Osservatore</label>
+                    <span id="observerFocusVal" class="text-gray-300 font-mono font-bold">0%</span>
+                </div>
+                <input type="range" id="observerFocus" min="0" max="100" value="0" class="w-full" oninput="updateSimulationSettings()">
+            </div>
+
+            <!-- Entropy Slider -->
+            <div>
+                <div class="flex justify-between mb-0.5">
+                    <label for="entropy" class="text-sm">Entropia (Caos/Movimento)</label>
+                    <span id="entropyVal" class="text-gray-300 font-mono font-bold">0.1</span>
+                </div>
+                <input type="range" id="entropy" min="0.1" max="10" step="0.1" value="0.1" class="w-full" oninput="updateSimulationSettings()">
+            </div>
+
+            <!-- Quark Bias Slider -->
+            <div>
+                <div class="flex justify-between mb-0.5">
+                    <label for="quarkBias" class="text-sm">Risultante Quark ≠ 0 (Bias)</label>
+                    <span id="quarkBiasVal" class="text-gray-300 font-mono font-bold">0.00</span>
+                </div>
+                <input type="range" id="quarkBias" min="0" max="1" step="0.01" value="0" class="w-full" oninput="updateSimulationSettings()">
+            </div>
+
+            <!-- Create / Restart Button (Appears at 100%) -->
+            <div id="restart-btn-container" class="pt-2 flex justify-center hidden">
+                <button 
+                    onclick="startNewGame()"
+                    class="bg-white/20 hover:bg-white/30 text-white font-semibold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition border border-white/30 backdrop-blur-md shadow-lg"
+                >
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scene, camera, renderer;
+        let particleMeshGroup;
+        let particles = [];
+        
+        let targetVertices = [];
+        let targetEdges = [];
+        let lineMeshGroup;
+        let activeLines = [];
+
+        let particleSize = 0.35;
+        let initialPinchDistance = null;
+
+        let gyroTargetX = 0;
+        let gyroTargetY = 0;
+        let currentGyroX = 0;
+        let currentGyroY = 0;
+        let isGyroSupported = false;
+        let currentWord = 'flower';
+
+        const ENGLISH_WORDS = ['flower', 'star', 'cube', 'pyramid', 'heart', 'sphere', 'crystal', 'atom'];
+
+        const SHAPE_PRESETS = {
+            'flower': generateComplexFlowerShape,
+            'star': generateComplexStarShape,
+            'cube': generateComplexCubeShape,
+            'pyramid': generateComplexPyramidShape,
+            'heart': generateComplexHeartShape,
+            'sphere': generateComplexSphereShape,
+            'crystal': generateComplexSphereShape,
+            'atom': generateComplexFlowerShape
+        };
+
+        function initThree() {
+            const canvas = document.getElementById('webgl-canvas');
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.012);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 42);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            particleMeshGroup = new THREE.Group();
+            scene.add(particleMeshGroup);
+
+            lineMeshGroup = new THREE.Group();
+            scene.add(lineMeshGroup);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene.add(ambientLight);
+
+            window.addEventListener('resize', onWindowResize);
+            
+            window.addEventListener('touchstart', handleTouchStart, { passive: false });
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+            window.addEventListener('touchend', handleTouchEnd);
+
+            setupGyroscope();
+            animate();
+        }
+
+        function startSimulation() {
+            const startScreen = document.getElementById('start-screen');
+            startScreen.style.opacity = '0';
+            setTimeout(() => {
+                startScreen.classList.add('hidden');
+                document.getElementById('top-bar').style.opacity = '1';
+                document.getElementById('top-bar').style.pointerEvents = 'auto';
+                document.getElementById('controls-panel').style.opacity = '1';
+                document.getElementById('controls-panel').style.pointerEvents = 'auto';
+            }, 500);
+
+            // Set exact specified default initial slider values when starting
+            document.getElementById('particleCount').value = 0;
+            document.getElementById('observerFocus').value = 0;
+            document.getElementById('entropy').value = 0.1;
+            document.getElementById('quarkBias').value = 0.00;
+
+            updateSimulationSettings();
+            initRandomConcept();
+        }
+
+        function startNewGame() {
+            document.getElementById('restart-btn-container').classList.add('hidden');
+            
+            // Reset sliders to exact specified default values
+            document.getElementById('particleCount').value = 0;
+            document.getElementById('observerFocus').value = 0;
+            document.getElementById('entropy').value = 0.1;
+            document.getElementById('quarkBias').value = 0.00;
+
+            updateSimulationSettings();
+            initRandomConcept();
+        }
+
+        function initRandomConcept() {
+            const randomIndex = Math.floor(Math.random() * ENGLISH_WORDS.length);
+            currentWord = ENGLISH_WORDS[randomIndex];
+
+            const wordDisplay = document.getElementById('word-display');
+            if (wordDisplay) {
+                wordDisplay.innerText = `Target: ${currentWord.toUpperCase()}`;
+            }
+
+            resetSceneData();
+
+            const generatorFn = SHAPE_PRESETS[currentWord] || generateComplexSphereShape;
+            const shapeData = generatorFn();
+
+            targetVertices = shapeData.vertices.map((v, index) => ({
+                id: index,
+                position: v.pos.clone(),
+                activated: false,
+                absorbedCount: 0,
+                pointMesh: null
+            }));
+
+            targetEdges = shapeData.edges.map(edge => ({
+                from: edge[0],
+                to: edge[1],
+                active: false
+            }));
+
+            updateProgressDisplay();
+        }
+
+        function generateComplexFlowerShape() {
+            const vertices = [];
+            const edges = [];
+            const petals = 12;
+            const radialSteps = 8;
+            
+            vertices.push({ pos: new THREE.Vector3(0, 0, 0), mesh: null });
+
+            let vIdx = 1;
+
+            for (let i = 0; i < petals; i++) {
+                const angle = (i / petals) * Math.PI * 2;
+                const cosA = Math.cos(angle);
+                const sinA = Math.sin(angle);
+
+                for (let r = 1; r <= radialSteps; r++) {
+                    const radius = (r / radialSteps) * 16;
+                    const zBend = Math.sin((r / radialSteps) * Math.PI) * 4;
+                    const spread = Math.sin((r / radialSteps) * Math.PI) * 2.5;
+
+                    const pLeft = new THREE.Vector3(
+                        (cosA * radius) - (sinA * spread),
+                        (sinA * radius) + (cosA * spread),
+                        zBend
+                    );
+                    const pRight = new THREE.Vector3(
+                        (cosA * radius) + (sinA * spread),
+                        (sinA * radius) - (cosA * spread),
+                        zBend
+                    );
+
+                    vertices.push({ pos: pLeft, mesh: null });
+                    vertices.push({ pos: pRight, mesh: null });
+
+                    const currentLeft = vIdx;
+                    const currentRight = vIdx + 1;
+
+                    if (r === 1) {
+                        edges.push([0, currentLeft], [0, currentRight]);
+                    } else {
+                        const prevLeft = vIdx - 2;
+                        const prevRight = vIdx - 1;
+                        edges.push([prevLeft, currentLeft], [prevRight, currentRight]);
+                        edges.push([currentLeft, currentRight]);
+                    }
+
+                    vIdx += 2;
+                }
+
+                const tipLeft = vIdx - 2;
+                const tipRight = vIdx - 1;
+                edges.push([tipLeft, tipRight]);
+            }
+
+            return { vertices, edges };
+        }
+
+        function generateComplexStarShape() {
+            const vertices = [];
+            const edges = [];
+            const points = 10;
+            const layers = 5;
+
+            vertices.push({ pos: new THREE.Vector3(0, 0, 10), mesh: null });
+            vertices.push({ pos: new THREE.Vector3(0, 0, -10), mesh: null });
+
+            for (let l = 1; l <= layers; l++) {
+                const layerRadiusScale = (l / layers);
+                const zOffset = (1 - layerRadiusScale) * 6;
+
+                for (let i = 0; i < points * 2; i++) {
+                    const r = (i % 2 === 0 ? 18 : 7) * layerRadiusScale;
+                    const angle = (i / (points * 2)) * Math.PI * 2;
+                    
+                    const vPos = new THREE.Vector3(Math.cos(angle) * r, Math.sin(angle) * r, (i % 2 === 0 ? zOffset : -zOffset));
+                    vertices.push({ pos: vPos, mesh: null });
+                }
+            }
+
+            const perLayer = points * 2;
+            for (let l = 0; l < layers; l++) {
+                const offset = 2 + l * perLayer;
+                for (let i = 0; i < perLayer; i++) {
+                    const next = offset + ((i + 1) % perLayer);
+                    edges.push([offset + i, next]);
+
+                    if (l === layers - 1) {
+                        edges.push([0, offset + i]);
+                        edges.push([1, offset + i]);
+                    }
+
+                    if (l < layers - 1) {
+                        edges.push([offset + i, offset + i + perLayer]);
+                    }
+                }
+            }
+
+            return { vertices, edges };
+        }
+
+        function generateComplexCubeShape() {
+            const geom = new THREE.BoxGeometry(18, 18, 18, 4, 4, 4);
+            return extractUniqueWireframeFromGeometry(geom);
+        }
+
+        function generateComplexPyramidShape() {
+            const geom = new THREE.ConeGeometry(14, 20, 16, 4);
+            return extractUniqueWireframeFromGeometry(geom);
+        }
+
+        function generateComplexHeartShape() {
+            const vertices = [];
+            const edges = [];
+            const steps = 36;
+
+            for (let j = -3; j <= 3; j++) {
+                const zScale = Math.cos((j / 3) * (Math.PI / 2));
+                const z = j * 2.5;
+
+                for (let i = 0; i < steps; i++) {
+                    const t = (i / steps) * Math.PI * 2;
+                    const x = 16 * Math.pow(Math.sin(t), 3) * zScale;
+                    const y = (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * zScale;
+                    vertices.push({ pos: new THREE.Vector3(x * 0.75, y * 0.75, z), mesh: null });
+                }
+            }
+
+            const layerSize = steps;
+            const totalLayers = 7;
+
+            for (let l = 0; l < totalLayers; l++) {
+                const offset = l * layerSize;
+                for (let i = 0; i < layerSize; i++) {
+                    const next = offset + ((i + 1) % layerSize);
+                    edges.push([offset + i, next]);
+
+                    if (l < totalLayers - 1) {
+                        edges.push([offset + i, offset + i + layerSize]);
+                    }
+                }
+            }
+
+            return { vertices, edges };
+        }
+
+        function generateComplexSphereShape() {
+            const geom = new THREE.IcosahedronGeometry(13, 2);
+            return extractUniqueWireframeFromGeometry(geom);
+        }
+
+        function extractUniqueWireframeFromGeometry(geom) {
+            const posAttr = geom.attributes.position;
+            const rawVertices = [];
+            const vertices = [];
+            const edges = [];
+            const map = new Map();
+
+            for (let i = 0; i < posAttr.count; i++) {
+                const v = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
+                let key = `${v.x.toFixed(1)},${v.y.toFixed(1)},${v.z.toFixed(1)}`;
+                if (!map.has(key)) {
+                    map.set(key, vertices.length);
+                    vertices.push({ pos: v, mesh: null });
+                }
+                rawVertices.push(map.get(key));
+            }
+
+            const index = geom.index;
+            if (index) {
+                for (let i = 0; i < index.count; i += 3) {
+                    const a = rawVertices[index.getX(i)];
+                    const b = rawVertices[index.getX(i+1)];
+                    const c = rawVertices[index.getX(i+2)];
+                    edges.push([a, b], [b, c], [c, a]);
+                }
+            } else {
+                for (let i = 0; i < rawVertices.length; i += 3) {
+                    const a = rawVertices[i];
+                    const b = rawVertices[i+1];
+                    const c = rawVertices[i+2];
+                    edges.push([a, b], [b, c], [c, a]);
+                }
+            }
+
+            return { vertices, edges };
+        }
+
+        function createParticleData() {
+            const bound = 28;
+            const pos = new THREE.Vector3(
+                (Math.random() - 0.5) * bound * 2,
+                (Math.random() - 0.5) * bound * 2,
+                (Math.random() - 0.5) * bound * 2
+            );
+
+            const geometry = new THREE.SphereGeometry(particleSize, 8, 8);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xc8c8c8,
+                transparent: true,
+                opacity: 0.35,
+                depthTest: true
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.copy(pos);
+            particleMeshGroup.add(mesh);
+
+            return {
+                mesh: mesh,
+                vx: 0,
+                vy: 0,
+                vz: 0,
+                quark: 0,
+                real: false,
+                visible: true
+            };
+        }
+
+        function syncParticleCount() {
+            const targetCount = parseInt(document.getElementById('particleCount').value);
+
+            while (particles.length < targetCount) {
+                particles.push(createParticleData());
+            }
+            while (particles.length > targetCount) {
+                const p = particles.pop();
+                if (p) {
+                    particleMeshGroup.remove(p.mesh);
+                    p.mesh.geometry.dispose();
+                    p.mesh.material.dispose();
+                }
+            }
+        }
+
+        function updateSimulationSettings() {
+            document.getElementById('particleCountVal').innerText = document.getElementById('particleCount').value;
+            document.getElementById('observerFocusVal').innerText = `${document.getElementById('observerFocus').value}%`;
+            document.getElementById('entropyVal').innerText = parseFloat(document.getElementById('entropy').value).toFixed(1);
+            document.getElementById('quarkBiasVal').innerText = parseFloat(document.getElementById('quarkBias').value).toFixed(2);
+
+            syncParticleCount();
+        }
+
+        function updateParticlesPhysics() {
+            const entropy = parseFloat(document.getElementById('entropy').value);
+            const observerFocus = parseFloat(document.getElementById('observerFocus').value);
+            const bias = parseFloat(document.getElementById('quarkBias').value);
+
+            const maxFocusFraction = 0.65;
+            const focusCount = Math.floor((observerFocus / 100) * maxFocusFraction * particles.length);
+            
+            const focusedIndices = new Set();
+            while (focusedIndices.size < focusCount && focusedIndices.size < particles.length) {
+                focusedIndices.add(Math.floor(Math.random() * particles.length));
+            }
+
+            const movementIntensity = Math.pow(entropy / 10, 2) * 0.22;
+            const bound = 30;
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+
+                if (entropy > 0) {
+                    p.vx += (Math.random() - 0.5) * movementIntensity;
+                    p.vy += (Math.random() - 0.5) * movementIntensity;
+                    p.vz += (Math.random() - 0.5) * movementIntensity;
+
+                    p.vx = Math.max(-0.45, Math.min(0.45, p.vx));
+                    p.vy = Math.max(-0.45, Math.min(0.45, p.vy));
+                    p.vz = Math.max(-0.45, Math.min(0.45, p.vz));
+
+                    p.mesh.position.x += p.vx;
+                    p.mesh.position.y += p.vy;
+                    p.mesh.position.z += p.vz;
+
+                    if (p.mesh.position.x < -bound) p.mesh.position.x = bound;
+                    if (p.mesh.position.x > bound) p.mesh.position.x = -bound;
+                    if (p.mesh.position.y < -bound) p.mesh.position.y = bound;
+                    if (p.mesh.position.y > bound) p.mesh.position.y = -bound;
+                    if (p.mesh.position.z < -bound) p.mesh.position.z = bound;
+                    if (p.mesh.position.z > bound) p.mesh.position.z = -bound;
+                }
+
+                p.quark = Math.random() < bias ? (Math.random() * 2 - 1) : 0;
+                p.real = false;
+            }
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const a = particles[i];
+                    const b = particles[j];
+                    const dist = a.mesh.position.distanceTo(b.mesh.position);
+
+                    if (dist < 2.5) {
+                        const sum = a.quark + b.quark;
+                        const shouldBeReal = sum !== 0 && (focusedIndices.has(i) || focusedIndices.has(j));
+
+                        if (shouldBeReal) {
+                            a.real = true;
+                            b.real = true;
+                        }
+                    }
+                }
+            }
+
+            particles.forEach((p) => {
+                p.visible = true; // Always display particles now
+
+                if (p.real && targetVertices.length > 0) {
+                    let closestVertex = null;
+                    let minDist = 14;
+
+                    targetVertices.forEach((target) => {
+                        const dist = p.mesh.position.distanceTo(target.position);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            closestVertex = target;
+                        }
+                    });
+
+                    if (closestVertex) {
+                        const pullDir = new THREE.Vector3().subVectors(closestVertex.position, p.mesh.position).normalize();
+                        p.mesh.position.addScaledVector(pullDir, 0.18);
+
+                        if (minDist < 1.3 && !closestVertex.activated) {
+                            closestVertex.absorbedCount += 1;
+                            
+                            if (!closestVertex.pointMesh) {
+                                createGlowingVertexPoint(closestVertex);
+                            }
+
+                            if (closestVertex.absorbedCount >= 2) {
+                                closestVertex.activated = true;
+                                checkAndFormLines();
+                            }
+                        }
+                    }
+                }
+
+                p.mesh.visible = p.visible;
+                if (p.real) {
+                    p.mesh.material.color.setHex(0xffffff);
+                    p.mesh.material.opacity = 0.95;
+                } else {
+                    p.mesh.material.color.setHex(0xc8c8c8);
+                    p.mesh.material.opacity = 0.3;
+                }
+            });
+        }
+
+        function createGlowingVertexPoint(vertex) {
+            const geom = new THREE.SphereGeometry(0.25, 10, 10);
+            const mat = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 1.0
+            });
+            const mesh = new THREE.Mesh(geom, mat);
+            mesh.position.copy(vertex.position);
+            lineMeshGroup.add(mesh);
+            vertex.pointMesh = mesh;
+        }
+
+        function resetSceneData() {
+            while(lineMeshGroup.children.length > 0) { 
+                const child = lineMeshGroup.children[0];
+                lineMeshGroup.remove(child); 
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) child.material.dispose();
+            }
+            activeLines = [];
+        }
+
+        function checkAndFormLines() {
+            targetEdges.forEach((edge) => {
+                if (!edge.active) {
+                    const v1 = targetVertices[edge.from];
+                    const v2 = targetVertices[edge.to];
+
+                    if (v1 && v2 && v1.activated && v2.activated) {
+                        edge.active = true;
+                        createGlowLine(v1.position, v2.position);
+                    }
+                }
+            });
+
+            updateProgressDisplay();
+        }
+
+        function createGlowLine(posA, posB) {
+            const points = [posA, posB];
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({
+                color: 0xffffff,
+                linewidth: 2,
+                transparent: true,
+                opacity: 0.95
+            });
+
+            const line = new THREE.Line(geometry, material);
+            lineMeshGroup.add(line);
+            activeLines.push(line);
+        }
+
+        function updateProgressDisplay() {
+            if (targetEdges.length === 0) return;
+            const activeCount = targetEdges.filter(e => e.active).length;
+            const percentage = Math.round((activeCount / targetEdges.length) * 100);
+            
+            const progressText = document.getElementById('progress-text');
+            const restartBtnContainer = document.getElementById('restart-btn-container');
+
+            if (progressText) {
+                if (percentage === 100) {
+                    progressText.innerText = `Materia Manifestata: 100% — Realtà Cristallizzata (${currentWord.toUpperCase()})`;
+                    progressText.classList.add('text-white', 'font-bold');
+                    if (restartBtnContainer) {
+                        restartBtnContainer.classList.remove('hidden');
+                    }
+                } else {
+                    progressText.innerText = `Materia Manifestata: ${percentage}%`;
+                    progressText.classList.remove('text-white', 'font-bold');
+                    if (restartBtnContainer) {
+                        restartBtnContainer.classList.add('hidden');
+                    }
+                }
+            }
+        }
+
+        function setupGyroscope() {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    document.getElementById('gyro-btn-container').classList.remove('hidden');
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                    isGyroSupported = true;
+                }
+            }
+        }
+
+        function requestGyroscopePermission() {
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation);
+                            document.getElementById('gyro-btn-container').classList.add('hidden');
+                            isGyroSupported = true;
+                        }
+                    })
+                    .catch(console.error);
+            }
+        }
+
+        function handleOrientation(event) {
+            const gamma = event.gamma || 0;
+            const beta = event.beta || 0;
+
+            gyroTargetY = (gamma / 90) * (Math.PI / 3);
+            gyroTargetX = ((beta - 45) / 90) * (Math.PI / 4);
+        }
+
+        function handleTouchStart(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('#controls-panel') || e.target.closest('#start-screen')) {
+                return;
+            }
+
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                initialPinchDistance = Math.hypot(dx, dy);
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (e.touches.length === 2 && initialPinchDistance) {
+                e.preventDefault();
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                const currentDistance = Math.hypot(dx, dy);
+                
+                const distanceDelta = currentDistance - initialPinchDistance;
+                const scaleMultiplier = 1 + (distanceDelta / 40); // Increased sensitivity
+
+                particleSize = Math.min(Math.max(particleSize * scaleMultiplier, 0.08), 2.8);
+
+                particles.forEach(p => {
+                    p.mesh.scale.setScalar(particleSize / 0.35);
+                });
+
+                initialPinchDistance = currentDistance;
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (e.touches.length < 2) {
+                initialPinchDistance = null;
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            currentGyroX += (gyroTargetX - currentGyroX) * 0.05;
+            currentGyroY += (gyroTargetY - currentGyroY) * 0.05;
+
+            // Restrict rotation to horizontal axis (Y axis only)
+            scene.rotation.y = currentGyroY;
+
+            if (lineMeshGroup) {
+                lineMeshGroup.rotation.y += 0.003;
+            }
+
+            updateParticlesPhysics();
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.onload = function() {
+            initThree();
+        };
+    </script>
+</body>
+</html>
