@@ -147,7 +147,7 @@
                     <label for="particleCount" class="text-sm">Conteggio Particelle</label>
                     <span id="particleCountVal" class="text-gray-300 font-mono font-bold">0</span>
                 </div>
-                <input type="range" id="particleCount" min="0" max="500" value="0" class="w-full" oninput="updateSimulationSettings()">
+                <input type="range" id="particleCount" min="0" max="800" value="0" class="w-full" oninput="updateSimulationSettings()">
             </div>
 
             <!-- Observer Focus Slider -->
@@ -200,7 +200,7 @@
         let activeLines = [];
 
         let particleSize = 0.35;
-        let initialPinchDistance = null;
+        let initialPinchDistance = 1;
 
         let gyroTargetX = 0;
         let gyroTargetY = 0;
@@ -731,13 +731,13 @@
 
             if (progressText) {
                 if (percentage === 100) {
-                    progressText.innerText = `Materia Manifestata: 100% — Realtà Cristallizzata (${currentWord.toUpperCase()})`;
+                    progressText.innerText = `Manifested Reality: 100% (${currentWord.toUpperCase()})`;
                     progressText.classList.add('text-white', 'font-bold');
                     if (restartBtnContainer) {
                         restartBtnContainer.classList.remove('hidden');
                     }
                 } else {
-                    progressText.innerText = `Materia Manifestata: ${percentage}%`;
+                    progressText.innerText = `Manifested Reality: ${percentage}%`;
                     progressText.classList.remove('text-white', 'font-bold');
                     if (restartBtnContainer) {
                         restartBtnContainer.classList.add('hidden');
