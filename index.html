@@ -142,7 +142,7 @@
             <!-- Particle Count Slider -->
             <div>
                 <div class="flex justify-between mb-0.5">
-                    <label for="particleCount" class="text-sm">Conteggio Particelle</label>
+                    <label for="particleCount" class="text-sm">Particle Count</label>
                     <span id="particleCountVal" class="text-gray-300 font-mono font-bold">0</span>
                 </div>
                 <input type="range" id="particleCount" min="0" max="800" value="0" class="w-full" oninput="updateSimulationSettings()">
@@ -151,7 +151,7 @@
             <!-- Observer Focus Slider -->
             <div>
                 <div class="flex justify-between mb-0.5">
-                    <label for="observerFocus" class="text-sm">Focus dell'Osservatore</label>
+                    <label for="observerFocus" class="text-sm">Observer's Focus</label>
                     <span id="observerFocusVal" class="text-gray-300 font-mono font-bold">0%</span>
                 </div>
                 <input type="range" id="observerFocus" min="0" max="100" value="0" class="w-full" oninput="updateSimulationSettings()">
@@ -160,16 +160,16 @@
             <!-- Entropy Slider -->
             <div>
                 <div class="flex justify-between mb-0.5">
-                    <label for="entropy" class="text-sm">Entropia (Caos/Movimento)</label>
+                    <label for="entropy" class="text-sm">Entropy</label>
                     <span id="entropyVal" class="text-gray-300 font-mono font-bold">0.1</span>
                 </div>
-                <input type="range" id="entropy" min="0.1" max="10" step="0.1" value="0.1" class="w-full" oninput="updateSimulationSettings()">
+                <input type="range" id="entropy" min="0.1" max="5" step="0.1" value="0.1" class="w-full" oninput="updateSimulationSettings()">
             </div>
 
             <!-- Quark Bias Slider -->
             <div>
                 <div class="flex justify-between mb-0.5">
-                    <label for="quarkBias" class="text-sm">Risultante Quark ≠ 0 (Bias)</label>
+                    <label for="quarkBias" class="text-sm">Quark ≠ 0 (Bias)</label>
                     <span id="quarkBiasVal" class="text-gray-300 font-mono font-bold">0.00</span>
                 </div>
                 <input type="range" id="quarkBias" min="0" max="1" step="0.01" value="0" class="w-full" oninput="updateSimulationSettings()">
