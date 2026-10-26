@@ -14,7 +14,7 @@
 
     <style>
         body, html {
-            font-size: 14px;
+            font-size: 16px;
             margin: 0;
             padding: 0;
             width: 100%;
@@ -104,9 +104,7 @@
                 legendText3: "Entropy: Controls the thermal and quantum agitation of the field, governing the chaotic movement and ferment of particles.",
                 legendText4: "CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annihilate into nothingness.",
                 close: "Close",
-                toggleParticles: "Virtual Particles",
-                visible: "Visible",
-                hidden: "Hidden"
+                toggleParticles: "Virtual Particles"
             },
             it: {
                 title: "Genesis Of Existence",
@@ -124,17 +122,15 @@
                 legendText3: "Entropia: Controlla l'agitazione termica e quantistica del campo, governando il movimento caotico e il fermento delle particelle.",
                 legendText4: "Violazione CP (Bias): L'asimmetria primordiale tra materia e antimateria. Senza questa minuscola scintilla, la materia si sarebbe annichilita nel nulla.",
                 close: "Chiudi",
-                toggleParticles: "Particelle Virtuali",
-                visible: "Visibili",
-                hidden: "Nascoste"
+                toggleParticles: "Particelle Virtuali"
             }
         };
 
         let currentLang = 'en';
         function setLanguage(lang) {
             currentLang = lang;
-            document.getElementById('lang-btn-it').className = lang === 'it' ? 'px-3 py-1 rounded-lg bg-white text-black font-medium text-sm transition' : 'px-3 py-1 rounded-lg text-white/60 hover:text-white text-sm transition';
-            document.getElementById('lang-btn-en').className = lang === 'en' ? 'px-3 py-1 rounded-lg bg-white text-black font-medium text-sm transition' : 'px-3 py-1 rounded-lg text-white/60 hover:text-white text-sm transition';
+            document.getElementById('lang-btn-en').className = lang === 'en' ? 'px-3 py-1 rounded-lg bg-white text-black font-medium text-xs transition' : 'px-3 py-1 rounded-lg text-white/60 hover:text-white text-xs transition';
+            document.getElementById('lang-btn-it').className = lang === 'it' ? 'px-3 py-1 rounded-lg bg-white text-black font-medium text-xs transition' : 'px-3 py-1 rounded-lg text-white/60 hover:text-white text-xs transition';
             updateStaticTexts();
         }
 
@@ -155,28 +151,24 @@
             document.getElementById('legend-txt-4').innerText = t.legendText4;
             document.getElementById('legend-close').innerText = t.close;
             document.getElementById('toggle-label-text').innerText = t.toggleParticles;
-            
-            const badge = document.getElementById('toggle-status-badge');
-            if (badge) {
-                badge.innerText = showVirtualParticles ? t.visible : t.hidden;
-            }
         }
     </script>
 
     <!-- ==================== TITLE SCREEN ==================== -->
     <div id="title-screen" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-black transition-opacity duration-700 px-6">
+        <!-- Language Switcher: EN a sinistra, IT a destra -->
         <div class="absolute top-6 right-6 flex items-center space-x-1 glass-input p-1.5 rounded-xl">
-            <button id="lang-btn-it" onclick="setLanguage('it')" class="px-3 py-1 rounded-lg text-white/60 hover:text-white text-sm transition">IT</button>
-            <button id="lang-btn-en" onclick="setLanguage('en')" class="px-3 py-1 rounded-lg bg-white text-black font-medium text-sm transition">EN</button>
+            <button id="lang-btn-en" onclick="setLanguage('en')" class="px-3 py-1 rounded-lg bg-white text-black font-medium text-xs transition">EN</button>
+            <button id="lang-btn-it" onclick="setLanguage('it')" class="px-3 py-1 rounded-lg text-white/60 hover:text-white text-xs transition">IT</button>
         </div>
 
         <div class="text-center space-y-6 max-w-xl px-4">
             <h1 id="ui-title" class="text-4xl md:text-5xl font-light tracking-widest text-white uppercase drop-shadow-xl">Genesis Of Existence</h1>
-            <p id="ui-subtitle" class="text-base text-gray-300 font-normal leading-relaxed tracking-wide">Existence is an observational evaluation system...</p>
+            <p id="ui-subtitle" class="text-base md:text-lg text-gray-300 font-normal leading-relaxed tracking-wide">Existence is an observational evaluation system...</p>
             <button 
                 id="ui-create-btn"
                 onclick="switchToSimulation()"
-                class="bg-white text-black font-medium px-9 py-4 rounded-full text-sm uppercase tracking-widest hover:bg-gray-200 transition duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)]"
+                class="bg-white text-black font-medium px-9 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-gray-200 transition duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)]"
             >
                 Start
             </button>
@@ -190,7 +182,7 @@
 
         <!-- Progress Header (Centered Top) -->
         <div class="absolute top-6 left-1/2 transform -translate-x-1/2 z-30 w-11/12 max-w-xs flex justify-center items-center h-10 pointer-events-auto">
-            <div id="progress-text" class="text-sm text-gray-200 font-normal tracking-widest uppercase drop-shadow text-center">
+            <div id="progress-text" class="text-xs text-gray-200 font-normal tracking-widest uppercase drop-shadow text-center">
                 Manifested Reality: 0%
             </div>
         </div>
@@ -199,33 +191,33 @@
         <button 
             id="ui-legend-btn"
             onclick="toggleLegend(true)"
-            class="absolute top-6 right-6 z-30 glass-input px-4 py-2 rounded-full text-sm text-white hover:bg-white/20 transition flex items-center space-x-1.5 border border-white/20 shadow-lg pointer-events-auto"
+            class="absolute top-6 right-6 z-30 glass-input px-4 py-2 rounded-full text-xs text-white hover:bg-white/20 transition flex items-center space-x-1.5 border border-white/20 shadow-lg pointer-events-auto"
         >
             <span>Info</span>
         </button>
 
         <div id="gyro-btn-container" class="absolute top-6 left-6 z-30 hidden pointer-events-auto">
-            <button id="enable-gyro-btn" onclick="requestGyroscopePermission()" class="glass-input px-4 py-2 rounded-full text-sm text-gray-200 hover:text-white border border-white/20 flex items-center space-x-2 transition">
+            <button id="enable-gyro-btn" onclick="requestGyroscopePermission()" class="glass-input px-4 py-2 rounded-full text-xs text-gray-200 hover:text-white border border-white/20 flex items-center space-x-2 transition">
                 <span>Gyro</span>
             </button>
         </div>
 
-        <!-- Controls Panel (Bottom) -->
-        <div id="controls-panel" class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-30 w-11/12 max-w-md p-4 glass-input rounded-2xl pointer-events-auto shadow-2xl">
+        <!-- Controls Panel (Bottom) senza linea divisoria e con toggle perfettamente simmetrico a filo -->
+        <div id="controls-panel" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 w-11/12 max-w-md p-4 glass-input rounded-2xl pointer-events-auto shadow-2xl">
             <div class="space-y-3 font-normal text-gray-100">
                 
                 <div>
                     <div class="flex justify-between mb-0.5 px-1">
-                        <label id="label-particle-count" for="particleCount" class="text-sm font-normal">Vacuum Density</label>
-                        <span id="particleCountVal" class="text-gray-200 font-mono font-normal text-sm">100</span>
+                        <label id="label-particle-count" for="particleCount" class="text-xs font-normal">Vacuum Density</label>
+                        <span id="particleCountVal" class="text-gray-200 font-mono font-normal text-xs">100</span>
                     </div>
                     <input type="range" id="particleCount" min="0" max="800" value="100" class="w-full" oninput="updateSimulationSettings()">
                 </div>
 
                 <div>
                     <div class="flex justify-between mb-0.5 px-1">
-                        <label id="label-observer-focus" for="observerFocus" class="text-sm font-normal">Observer's Focus</label>
-                        <span id="observerFocusVal" class="text-gray-200 font-mono font-normal text-sm">0%</span>
+                        <label id="label-observer-focus" for="observerFocus" class="text-xs font-normal">Observer's Focus</label>
+                        <span id="observerFocusVal" class="text-gray-200 font-mono font-normal text-xs">0%</span>
                     </div>
                     <input type="range" id="observerFocus" min="0" max="100" value="0" class="w-full" oninput="updateSimulationSettings()">
                 </div>
@@ -233,8 +225,8 @@
                 <!-- Entropy -->
                 <div>
                     <div class="flex justify-between mb-0.5 px-1">
-                        <label id="label-entropy" for="entropy" class="text-sm font-normal">Entropy</label>
-                        <span id="entropyVal" class="text-gray-200 font-mono font-normal text-sm">0.1</span>
+                        <label id="label-entropy" for="entropy" class="text-xs font-normal">Entropy</label>
+                        <span id="entropyVal" class="text-gray-200 font-mono font-normal text-xs">0.1</span>
                     </div>
                     <input type="range" id="entropy" min="0.1" max="2.0" step="0.1" value="0.1" class="w-full" oninput="updateSimulationSettings()">
                 </div>
@@ -242,24 +234,25 @@
                 <!-- Quark Bias -->
                 <div>
                     <div class="flex justify-between mb-0.5 px-1">
-                        <label id="label-quark-bias" for="quarkBias" class="text-sm font-normal">CP Violation (Bias)</label>
-                        <span id="quarkBiasVal" class="text-gray-200 font-mono font-normal text-sm">0.00</span>
+                        <label id="label-quark-bias" for="quarkBias" class="text-xs font-normal">CP Violation (Bias)</label>
+                        <span id="quarkBiasVal" class="text-gray-200 font-mono font-normal text-xs">0.00</span>
                     </div>
                     <input type="range" id="quarkBias" min="0" max="1" step="0.01" value="0" class="w-full" oninput="updateSimulationSettings()">
                 </div>
-            </div>
-        </div>
 
-        <!-- Toggle Switch for Virtual Particles -->
-        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30 w-11/12 max-w-md pointer-events-auto">
-            <button 
-                onclick="toggleParticlesVisibility()"
-                id="particles-toggle-btn"
-                class="glass-input w-full py-3 px-4 rounded-xl flex items-center justify-between text-sm uppercase tracking-wider text-white hover:bg-white/10 transition border border-white/20 shadow-xl"
-            >
-                <span id="toggle-label-text" class="font-normal">Virtual Particles</span>
-                <div id="toggle-status-badge" class="bg-white/20 px-3 py-1 rounded-lg font-normal text-white transition text-sm">Visible</div>
-            </button>
+                <!-- Virtual Particles Toggle Switch (Senza linea divisoria, pallino a filo simmetrico) -->
+                <div class="flex items-center justify-between px-1 pt-1">
+                    <span id="toggle-label-text" class="text-xs font-normal">Virtual Particles</span>
+                    <button 
+                        type="button" 
+                        onclick="toggleParticlesVisibility()" 
+                        id="particles-toggle-switch" 
+                        class="relative inline-flex h-6 w-11 items-center rounded-full bg-white/30 transition-colors focus:outline-none shadow-inner p-0.5"
+                    >
+                        <span id="particles-toggle-thumb" class="inline-block h-5 w-5 transform rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] transition-transform translate-x-5"></span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Legend Modal -->
@@ -273,13 +266,13 @@
                     <p id="legend-txt-1">Vacuum Density: Regulates the concentration of virtual particles in the quantum vacuum. It represents the infinite potential of the big void before form emerges.</p>
                     <p id="legend-txt-2">Observer's Focus: Simulates the collapse of the wavefunction through observation. It bridges abstract possibilities into concrete reality.</p>
                     <p id="legend-txt-3">Entropy: Controls the thermal and quantum agitation of the field, governing the chaotic movement and ferment of particles.</p>
-                    <p id="legend-txt-4">CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annichilate into nothingness.</p>
+                    <p id="legend-txt-4">CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annihilate into nothingness.</p>
                 </div>
                 <div class="pt-2 flex justify-center">
                     <button 
                         id="legend-close"
                         onclick="toggleLegend(false)"
-                        class="bg-white text-black font-medium px-7 py-2.5 rounded-xl text-sm uppercase tracking-wider hover:bg-gray-200 transition"
+                        class="bg-white text-black font-medium px-7 py-2.5 rounded-xl text-xs uppercase tracking-wider hover:bg-gray-200 transition"
                     >
                         Close
                     </button>
@@ -313,7 +306,7 @@
         let cameraAngleTheta = 0; 
         let cameraAnglePhi = Math.PI / 2; 
         const cameraRadius = 42;
-        const cameraTargetY = 5.0; // Target di mira della camera allineato in alto
+        const cameraTargetY = 5.0;
 
         let gyroTargetX = 0;
         let gyroTargetY = 0;
@@ -359,7 +352,7 @@
             scene.add(particleMeshGroup);
 
             sculptureGroup = new THREE.Group();
-            sculptureGroup.position.set(0, 5.0, 0); // Posizionamento in alto della scultura nello spazio
+            sculptureGroup.position.set(0, 5.0, 0);
             scene.add(sculptureGroup);
 
             lineMeshGroup = new THREE.Group();
@@ -411,11 +404,20 @@
 
         function toggleParticlesVisibility() {
             showVirtualParticles = !showVirtualParticles;
-            const t = TRANSLATIONS[currentLang];
-            const badge = document.getElementById('toggle-status-badge');
-            if (badge) {
-                badge.innerText = showVirtualParticles ? t.visible : t.hidden;
-                badge.className = showVirtualParticles ? 'bg-white/20 px-3 py-1 rounded-lg font-normal text-white transition text-sm' : 'bg-red-500/30 px-3 py-1 rounded-lg font-normal text-red-300 transition text-sm';
+            const thumb = document.getElementById('particles-toggle-thumb');
+            const track = document.getElementById('particles-toggle-switch');
+            if (thumb && track) {
+                if (showVirtualParticles) {
+                    thumb.classList.remove('translate-x-0');
+                    thumb.classList.add('translate-x-5');
+                    track.classList.remove('bg-white/10');
+                    track.classList.add('bg-white/30');
+                } else {
+                    thumb.classList.remove('translate-x-5');
+                    thumb.classList.add('translate-x-0');
+                    track.classList.remove('bg-white/30');
+                    track.classList.add('bg-white/10');
+                }
             }
         }
 
@@ -439,7 +441,7 @@
             solidMesh.visible = false;
             sculptureGroup.add(solidMesh);
 
-            // 2. Picciolo Curvo Low-Poly (allineato alla traslazione della ciliegia)
+            // 2. Picciolo Curvo Low-Poly
             stemCurve = new THREE.CatmullRomCurve3([
                 new THREE.Vector3(0, 8.5, 0),
                 new THREE.Vector3(1.2, 13.0, 0.5),
@@ -526,7 +528,7 @@
             const bound = 28;
             const pos = new THREE.Vector3(
                 (Math.random() - 0.5) * bound * 2,
-                (Math.random() - 0.5) * bound * 2 + 3.0, // Particelle distribuite più in alto
+                (Math.random() - 0.5) * bound * 2 + 3.0,
                 (Math.random() - 0.5) * bound * 2
             );
 
@@ -683,7 +685,6 @@
                 }
 
                 let insideFigure = false;
-                // Controllo raggio ciliegia traslata a Y=2.0 nel sistema locale
                 const centerOffsetPos = localPos.clone().sub(new THREE.Vector3(0, 2.0, 0));
                 if (centerOffsetPos.length() < 7.8) {
                     insideFigure = true;
@@ -851,7 +852,7 @@
 
             if (progressText) {
                 if (percentage >= 70) {
-                    progressText.innerHTML = `${t.manifested}: ${percentage}% <br><span class="text-white font-normal tracking-widest text-sm drop-shadow-[0_0_12px_rgba(255,50,80,0.9)]">CHERRY</span>`;
+                    progressText.innerHTML = `${t.manifested}: ${percentage}% <br><span class="text-white font-normal tracking-widest text-xs drop-shadow-[0_0_12px_rgba(255,50,80,0.9)]">CHERRY</span>`;
                 } else {
                     progressText.innerText = `${t.manifested}: ${percentage}%`;
                 }
