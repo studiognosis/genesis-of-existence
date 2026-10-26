@@ -97,12 +97,12 @@
                 entropy: "Entropy",
                 quarkBias: "CP Violation (Bias)",
                 manifested: "Manifested Reality",
-                legendBtn: "ℹ️ Info",
+                legendBtn: "Info",
                 legendTitle: "Legend",
-                legendText1: "• Vacuum Density: Regulates the concentration of virtual particles in the quantum vacuum. It represents the infinite potential of the big void before form emerges.",
-                legendText2: "• Observer's Focus: Simulates the collapse of the wavefunction through observation. It bridges abstract possibilities into concrete reality.",
-                legendText3: "• Entropy: Controls the thermal and quantum agitation of the field, governing the chaotic movement and ferment of particles.",
-                legendText4: "• CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annihilate into nothingness.",
+                legendText1: "Vacuum Density: Regulates the concentration of virtual particles in the quantum vacuum. It represents the infinite potential of the big void before form emerges.",
+                legendText2: "Observer's Focus: Simulates the collapse of the wavefunction through observation. It bridges abstract possibilities into concrete reality.",
+                legendText3: "Entropy: Controls the thermal and quantum agitation of the field, governing the chaotic movement and ferment of particles.",
+                legendText4: "CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annihilate into nothingness.",
                 close: "Close",
                 toggleParticles: "Virtual Particles",
                 visible: "Visible",
@@ -119,10 +119,10 @@
                 manifested: "Materia Manifestata",
                 legendBtn: "ℹ️ Info",
                 legendTitle: "Legenda",
-                legendText1: "• Densità del Vuoto: Regola la concentrazione di particelle virtuali nel vuoto quantistico. Rappresenta il potenziale infinito del grande vuoto prima che emerga la forma.",
-                legendText2: "• Focus dell'Osservatore: Simula il collasso della funzione d'onda tramite l'osservazione. Traduce le possibilità astratte in realtà concreta.",
-                legendText3: "• Entropia: Controlla l'agitazione termica e quantistica del campo, governando il movimento caotico e il fermento delle particelle.",
-                legendText4: "• Violazione CP (Bias): L'asimmetria primordiale tra materia e antimateria. Senza questa minuscola scintilla, la materia si sarebbe annichilita nel nulla.",
+                legendText1: "Densità del Vuoto: Regola la concentrazione di particelle virtuali nel vuoto quantistico. Rappresenta il potenziale infinito del grande vuoto prima che emerga la forma.",
+                legendText2: "Focus dell'Osservatore: Simula il collasso della funzione d'onda tramite l'osservazione. Traduce le possibilità astratte in realtà concreta.",
+                legendText3: "Entropia: Controlla l'agitazione termica e quantistica del campo, governando il movimento caotico e il fermento delle particelle.",
+                legendText4: "Violazione CP (Bias): L'asimmetria primordiale tra materia e antimateria. Senza questa minuscola scintilla, la materia si sarebbe annichilita nel nulla.",
                 close: "Chiudi",
                 toggleParticles: "Particelle Virtuali",
                 visible: "Visibili",
@@ -171,16 +171,14 @@
         </div>
 
         <div class="text-center space-y-6 max-w-xl px-4">
-            <!-- Titolo generico senza grassetto (font-light) -->
             <h1 id="ui-title" class="text-4xl md:text-5xl font-light tracking-widest text-white uppercase drop-shadow-xl">Genesis Of Existence</h1>
-            <!-- Sottotitolo a 16px (text-base) -->
             <p id="ui-subtitle" class="text-base text-gray-300 font-normal leading-relaxed tracking-wide">Existence is an observational evaluation system...</p>
             <button 
                 id="ui-create-btn"
                 onclick="switchToSimulation()"
                 class="bg-white text-black font-medium px-9 py-4 rounded-full text-sm uppercase tracking-widest hover:bg-gray-200 transition duration-300 shadow-[0_0_25px_rgba(255,255,255,0.4)]"
             >
-                Create
+                Start
             </button>
         </div>
     </div>
@@ -191,7 +189,7 @@
         <canvas id="webgl-canvas"></canvas>
 
         <!-- Progress Header (Centered Top) -->
-        <div class="absolute top-6 left-1/2 transform -translate-x-1/2 z-30 w-11/12 max-w-xs flex justify-center items-center pointer-events-auto">
+        <div class="absolute top-6 left-1/2 transform -translate-x-1/2 z-30 w-11/12 max-w-xs flex justify-center items-center h-10 pointer-events-auto">
             <div id="progress-text" class="text-sm text-gray-200 font-normal tracking-widest uppercase drop-shadow text-center">
                 Manifested Reality: 0%
             </div>
@@ -268,16 +266,14 @@
         <div id="legend-modal" class="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 pointer-events-auto">
             <div class="glass-input max-w-md w-full p-5 rounded-2xl space-y-3.5 border border-white/15 shadow-2xl relative text-left">
                 <div class="flex justify-between items-center px-1">
-                    <!-- Titolo legenda non bold (font-normal) -->
-                    <h3 id="legend-title" class="text-lg font-normal text-white uppercase tracking-wider">Controls Legend</h3>
+                    <h3 id="legend-title" class="text-lg font-normal text-white uppercase tracking-wider">Legend</h3>
                     <button onclick="toggleLegend(false)" class="text-white/70 hover:text-white text-lg font-normal px-2 py-0.5">✕</button>
                 </div>
-                <!-- Testo a 16px (text-base) non bold -->
                 <div class="space-y-3 text-base text-gray-100 font-normal py-1 max-h-72 overflow-y-auto controls-scroll px-1 leading-relaxed">
-                    <p id="legend-txt-1">• Vacuum Density: Regulates the concentration of virtual particles in the quantum vacuum. It represents the infinite potential of the big void before form emerges.</p>
-                    <p id="legend-txt-2">• Observer's Focus: Simulates the collapse of the wavefunction through observation. It bridges abstract possibilities into concrete reality.</p>
-                    <p id="legend-txt-3">• Entropy: Controls the thermal and quantum agitation of the field, governing the chaotic movement and ferment of particles.</p>
-                    <p id="legend-txt-4">• CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annihilate into nothingness.</p>
+                    <p id="legend-txt-1">Vacuum Density: Regulates the concentration of virtual particles in the quantum vacuum. It represents the infinite potential of the big void before form emerges.</p>
+                    <p id="legend-txt-2">Observer's Focus: Simulates the collapse of the wavefunction through observation. It bridges abstract possibilities into concrete reality.</p>
+                    <p id="legend-txt-3">Entropy: Controls the thermal and quantum agitation of the field, governing the chaotic movement and ferment of particles.</p>
+                    <p id="legend-txt-4">CP Violation (Bias): The primordial asymmetry between matter and antimatter. Without this tiny spark, matter would annichilate into nothingness.</p>
                 </div>
                 <div class="pt-2 flex justify-center">
                     <button 
@@ -317,6 +313,7 @@
         let cameraAngleTheta = 0; 
         let cameraAnglePhi = Math.PI / 2; 
         const cameraRadius = 42;
+        const cameraTargetY = 5.0; // Target di mira della camera allineato in alto
 
         let gyroTargetX = 0;
         let gyroTargetY = 0;
@@ -362,7 +359,7 @@
             scene.add(particleMeshGroup);
 
             sculptureGroup = new THREE.Group();
-            sculptureGroup.position.set(0, 1.5, 0);
+            sculptureGroup.position.set(0, 5.0, 0); // Posizionamento in alto della scultura nello spazio
             scene.add(sculptureGroup);
 
             lineMeshGroup = new THREE.Group();
@@ -395,7 +392,7 @@
         }
 
         function updateCameraPosition() {
-            const targetCenter = new THREE.Vector3(0, 1.5, 0);
+            const targetCenter = new THREE.Vector3(0, cameraTargetY, 0);
             camera.position.x = targetCenter.x + cameraRadius * Math.sin(cameraAnglePhi) * Math.sin(cameraAngleTheta);
             camera.position.y = targetCenter.y + cameraRadius * Math.cos(cameraAnglePhi);
             camera.position.z = targetCenter.z + cameraRadius * Math.sin(cameraAnglePhi) * Math.cos(cameraAngleTheta);
@@ -425,8 +422,10 @@
         function initCherryModel() {
             resetSceneData();
 
-            // 1. Frutto Ciliegia Low-Poly
+            // 1. Frutto Ciliegia Low-Poly (traslato verso l'alto direttamente sulla geometria)
             const fruitGeo = new THREE.IcosahedronGeometry(7.0, 1);
+            fruitGeo.translate(0, 2.0, 0); 
+
             const solidMat = new THREE.MeshStandardMaterial({
                 color: 0xdd0022,       
                 roughness: 0.25,        
@@ -440,11 +439,11 @@
             solidMesh.visible = false;
             sculptureGroup.add(solidMesh);
 
-            // 2. Picciolo Curvo Low-Poly
+            // 2. Picciolo Curvo Low-Poly (allineato alla traslazione della ciliegia)
             stemCurve = new THREE.CatmullRomCurve3([
-                new THREE.Vector3(0, 6.5, 0),
-                new THREE.Vector3(1.2, 11.0, 0.5),
-                new THREE.Vector3(5.2, 14.0, 0)
+                new THREE.Vector3(0, 8.5, 0),
+                new THREE.Vector3(1.2, 13.0, 0.5),
+                new THREE.Vector3(5.2, 16.0, 0)
             ]);
             const stemGeo = new THREE.TubeGeometry(stemCurve, 32, 0.4, 6, false);
             const stemMat = new THREE.MeshStandardMaterial({
@@ -527,7 +526,7 @@
             const bound = 28;
             const pos = new THREE.Vector3(
                 (Math.random() - 0.5) * bound * 2,
-                (Math.random() - 0.5) * bound * 2,
+                (Math.random() - 0.5) * bound * 2 + 3.0, // Particelle distribuite più in alto
                 (Math.random() - 0.5) * bound * 2
             );
 
@@ -613,8 +612,8 @@
 
                 if (p.mesh.position.x < -bound) p.mesh.position.x = bound;
                 if (p.mesh.position.x > bound) p.mesh.position.x = -bound;
-                if (p.mesh.position.y < -bound) p.mesh.position.y = bound;
-                if (p.mesh.position.y > bound) p.mesh.position.y = -bound;
+                if (p.mesh.position.y < -bound + 3) p.mesh.position.y = bound + 3;
+                if (p.mesh.position.y > bound + 3) p.mesh.position.y = -bound + 3;
                 if (p.mesh.position.z < -bound) p.mesh.position.z = bound;
                 if (p.mesh.position.z > bound) p.mesh.position.z = -bound;
 
@@ -683,12 +682,13 @@
                     }
                 }
 
-                // Controllo vicinanza alla figura (Frutto + Picciolo)
                 let insideFigure = false;
-                if (localPos.length() < 7.8) {
-                    insideFigure = true; // Corpo ciliegia
+                // Controllo raggio ciliegia traslata a Y=2.0 nel sistema locale
+                const centerOffsetPos = localPos.clone().sub(new THREE.Vector3(0, 2.0, 0));
+                if (centerOffsetPos.length() < 7.8) {
+                    insideFigure = true;
                 } else if (getApproxStemDistance(localPos) < 1.2) {
-                    insideFigure = true; // Picciolo curvo
+                    insideFigure = true;
                 }
 
                 if (p.real) {
@@ -729,7 +729,6 @@
                 rebuildActiveLines();
             }
 
-            // Transizione fluida e fade wireframe (60% - 80%)
             if (solidMesh && stemMesh && lineMeshGroup) {
                 const pct = getManifestationPercentage();
 
