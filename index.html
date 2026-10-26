@@ -28,6 +28,36 @@
             touch-action: none;
         }
 
+        p{
+            color: #999;
+        }
+
+        #controls-panel{
+            width: calc(100vw - 32px);
+            bottom: 16px;
+        }
+
+        .top-6{
+            top: 16px;
+            height: 40px;
+        }
+
+        button:not(#lang-btn-en, #lang-btn-it, #particles-toggle-switch){
+            min-height: 40px;
+        }
+
+        #lang-btn-en, #lang-btn-it{
+            height: 28px;
+        }
+
+        #gyro-btn-container{
+            left: 16px;
+        }
+
+        #ui-legend-btn{
+            right: 16px;
+        }
+
         #webgl-canvas {
             position: absolute;
             top: 0;
@@ -429,9 +459,9 @@
             fruitGeo.translate(0, 2.0, 0); 
 
             const solidMat = new THREE.MeshStandardMaterial({
-                color: 0xAD0000,       
-                roughness: 0.05,        
-                metalness: 0.2,
+                color: 0x79000A,       
+                roughness: 0.3,        
+                metalness: 0.1,
                 flatShading: true,     
                 transparent: true,
                 opacity: 0.0
@@ -449,8 +479,9 @@
             ]);
             const stemGeo = new THREE.TubeGeometry(stemCurve, 32, 0.4, 6, false);
             const stemMat = new THREE.MeshStandardMaterial({
-                color: 0x072612,       
-                roughness: 0.7,
+                color: 0x004C25,       
+                roughness: 0.3,
+                metalness: 0.1,
                 flatShading: true,
                 transparent: true,
                 opacity: 0.0
